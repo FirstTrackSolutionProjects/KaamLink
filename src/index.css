@@ -1,0 +1,88 @@
+
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+ * Design tokens — replaces tailwind.config.js theme.extend from v3.
+ * These generate real utilities: bg-ivory, text-ink, font-display,
+ * shadow-soft, animate-fade-up, etc.
+ * --------------------------------------------------------------- */
+@theme {
+  --color-ivory: #FFFDF7;
+  --color-surface: #FFFFFF;
+  --color-ink: #27170F;
+  --color-muted: #78716C;
+  --color-line: #F0E9DE;
+
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  --shadow-soft: 0 8px 30px -12px rgba(39, 23, 15, 0.15);
+  --shadow-card: 0 4px 20px -6px rgba(39, 23, 15, 0.10);
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-blob-float: blob-float 9s ease-in-out infinite;
+  --animate-marquee: marquee 26s linear infinite;
+}
+
+@keyframes fade-up {
+  0% { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes blob-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, -30px) scale(1.08); }
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ivory text-ink font-body antialiased;
+}
+
+h1, h2, h3, h4 {
+  @apply font-display;
+}
+
+/* Accessible focus ring */
+:focus-visible {
+  outline: 2px solid #DB2777;
+  outline-offset: 3px;
+}
+
+/* Hide scrollbar on snap-scroll sliders while keeping them scrollable */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Reveal-on-scroll base state, toggled by useReveal hook */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal, .reveal.in-view {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-blob-float, .animate-marquee {
+    animation: none !important;
+  }
+}
