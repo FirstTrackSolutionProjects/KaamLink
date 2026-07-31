@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { Menu, X, User, LogIn, UserPlus, ArrowRight } from "lucide-react";
 
 const NAV_LINKS = [
+  { label: "Home", to:"/" },
   { label: "Services", href: "/#services" },
-  { label: "How it works", href: "/#how-it-works" },
+  
   { label: "About", href: "/about", isRoute: true },
   { label: "Blog", href: "/blog", isRoute: true },
   { label: "Contact", href: "/contact", isRoute: true },
