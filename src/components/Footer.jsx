@@ -57,7 +57,7 @@ export default function Footer() {
         </div>
 ` `
         <div>
-          <p className="text-sm font-semibold text-ivory mb-4">Services</p>
+          <p className="text-sm font-semibold text-ivory mb-4">Service</p>
           <ul className="space-y-2.5 text-sm">
             {SERVICE_LINKS.map((s) => (
               <li key={s}>
