@@ -16,11 +16,14 @@ const COMPANY_LINKS = [
   { label: "Careers", to: "/contact" },
   { label: "Partner with us", to: "/contact" },
   { label: "Blog", to: "/blog" },
+   
 ];
 
 const QUICK_LINKS = [
   { label: "Terms & Conditions", to: "/terms" },
   { label: "Privacy Policy", to: "/privacy" },
+  { label: "Refund & Cancellation", to: "/refund" },
+  { label: "Data Security", to: "/data" },
 ];
 
 export default function Footer() {

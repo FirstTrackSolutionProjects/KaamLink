@@ -16,13 +16,15 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
-
+import RefundCancellation from "./pages/Refund";
+import DataSecurity from "./pages/DataSecurity";
 export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Home />}/>
        <Route index element={<Hero />} />
+       
           <Route path="services" element={<Services />} />
           <Route path="how-it-works" element={<HowItWorks />} />
           <Route path="cities" element={<Cities />} />
@@ -35,7 +37,9 @@ export default function App() {
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="terms" element={<Terms />} />
+        <Route path="refund" element={<RefundCancellation />} />
          <Route path="privacy" element={<Privacy />} />
+          <Route path="data" element={<DataSecurity />} />
       </Route>
     </Routes>
   );
