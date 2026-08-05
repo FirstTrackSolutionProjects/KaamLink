@@ -36,7 +36,11 @@
 // import avatar4 from "./avatar-4.png";
 // import avatar5 from "./avatar-5.png";
 // import footerImg from "./footer-illustration.png";
+import logoImg from "../assets/logo.png"
 
+export const assets = {
+  logoImg,
+};
 // Hero illustration — square, sits beside the headline
 // Freepik search: "home service illustration" / "cleaning service flat illustration"
 export const heroImage = {

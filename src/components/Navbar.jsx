@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import {Link } from "react-router-dom";
 import { Menu, X, User, LogIn, UserPlus, ArrowRight } from "lucide-react";
+import {assets} from "../assets/asset";
 
 const NAV_LINKS = [
-  { label: "Home", to:"/" },
+  {
+    label: "Home",
+    href: "/",
+    isRoute: true,
+  },
   { label: "Services", href: "/#services" },
   
   { label: "About", href: "/about", isRoute: true },
@@ -43,11 +48,20 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-8 h-18 py-4">
-        <Link to="/" className="text-2xl font-display font-extrabold tracking-tight">
-          Kaam
+        
+        <Link to="/" className="flex  items-center group">
+<img
+    src={assets.logoImg}
+    alt=" Logo"
+    className="w-18 h-17 object-contain group-hover:scale-105 transition-transform duration-200"
+  />
+
+         <span className="text-2xl font-display font-extrabold tracking-tight">
+        Kaam
           <span className="bg-gradient-to-r from-amber-500 to-pink-600 bg-clip-text text-transparent">
             Link
           </span>
+          </span> 
         </Link>
 
         <ul className="hidden md:flex items-center gap-8 font-medium text-sm text-ink/80">
