@@ -33,64 +33,50 @@ function chunk(arr, size) {
 function ServiceCard({ s }) {
   const Icon = s.icon;
   return (
-    <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-line/80 bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-soft">
-      {s.tag && (
-        <span
-          className={`absolute top-5 right-5 z-10 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${TAG_STYLES[s.tag]}`}
-        >
-          {s.tag}
-        </span>
-      )}
-
-      {/* watermark icon */}
-      <Icon
-        size={110}
-        strokeWidth={1.5}
-        className="pointer-events-none absolute -bottom-7 -right-7 rotate-12 text-ink/[0.04]"
-      />
-
-      <div className="relative h-12 w-12 shrink-0 rounded-2xl bg-gradient-to-br from-amber-500 to-pink-600 shadow-card grid place-items-center transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-110">
-        <Icon size={22} className="text-white" />
+    <div className="group flex h-full flex-col rounded-2xl border border-line bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-soft">
+      <div className="flex items-start justify-between">
+        <div className="h-11 w-11 rounded-xl bg-brand-50 grid place-items-center transition-colors group-hover:bg-brand-600">
+          <Icon size={20} className="text-brand-600 transition-colors group-hover:text-white" />
+        </div>
+        {s.tag && (
+          <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${
+            s.tag === "Bestseller"
+              ? "bg-gold-400/15 text-gold-600"
+              : s.tag === "Popular"
+              ? "bg-brand-50 text-brand-600"
+              : "bg-white border border-line text-muted"
+          }`}>
+            {s.tag}
+          </span>
+        )}
       </div>
 
-      <h3 className="relative mt-5 font-display text-lg font-bold leading-snug">
-        {s.name}
-      </h3>
-      <p className="relative mt-1.5 text-sm leading-relaxed text-muted line-clamp-2">
-        {s.desc}
-      </p>
+      <h3 className="mt-4 font-display text-base font-bold leading-snug text-ink">{s.name}</h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-muted line-clamp-2">{s.desc}</p>
 
-      <div className="relative mt-4 flex items-center gap-3 text-xs text-muted">
+      <div className="mt-3 flex items-center gap-3 text-xs text-muted">
         <span className="inline-flex items-center gap-1">
-          <Star size={13} className="fill-amber-500 text-amber-500" />
+          <Star size={12} className="fill-gold-400 text-gold-400" />
           <span className="font-semibold text-ink">{s.rating}</span>
           <span>({s.reviews})</span>
         </span>
         <span className="h-1 w-1 rounded-full bg-line" />
-        <span className="inline-flex items-center gap-1">
-          <Clock size={13} />
-          {s.duration}
-        </span>
+        <span className="inline-flex items-center gap-1"><Clock size={12} /> {s.duration}</span>
       </div>
 
-      <div className="relative mt-5 flex items-end justify-between border-t border-line/80 pt-5">
+      <div className="mt-auto pt-4 flex items-end justify-between border-t border-line mt-4">
         <div>
-          <p className="text-[11px] text-muted">Starting at</p>
+          <p className="text-[10px] uppercase tracking-wide text-muted">From</p>
           <p className="flex items-baseline gap-1.5">
-            <span className="font-display text-xl font-extrabold">₹{s.price}</span>
-            {s.original && (
-              <span className="text-xs text-muted line-through">₹{s.original}</span>
-            )}
+            <span className="font-display text-lg font-extrabold text-ink">₹{s.price}</span>
+            {s.original && <span className="text-xs text-muted line-through">₹{s.original}</span>}
           </p>
         </div>
         <button
           aria-label={`Book ${s.name}`}
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ivory transition-colors duration-300 group-hover:bg-gradient-to-r group-hover:from-amber-500 group-hover:to-pink-600"
+          className="grid h-9 w-9 place-items-center rounded-full bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-600 group-hover:text-white"
         >
-          <ArrowUpRight
-            size={16}
-            className="text-ink transition-colors duration-300 group-hover:text-white"
-          />
+          <ArrowUpRight size={15} />
         </button>
       </div>
     </div>

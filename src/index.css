@@ -1,88 +1,120 @@
-
 @import "tailwindcss";
 
-/* ---------------------------------------------------------------
- * Design tokens — replaces tailwind.config.js theme.extend from v3.
- * These generate real utilities: bg-ivory, text-ink, font-display,
- * shadow-soft, animate-fade-up, etc.
- * --------------------------------------------------------------- */
 @theme {
-  --color-ivory: #FFFDF7;
-  --color-surface: #FFFFFF;
-  --color-ink: #27170F;
-  --color-muted: #78716C;
-  --color-line: #F0E9DE;
+  /* ---- Brand ---- */
+  --color-ink:        #0E0B1F;
+  --color-ink-soft:   #1B1730;
+  --color-ivory:      #FBFAFF;
+  --color-surface:    #FFFFFF;
+  --color-muted:      #6B6880;
+  --color-line:       #E9E6F5;
 
-  --font-display: "Plus Jakarta Sans", sans-serif;
-  --font-body: "Inter", sans-serif;
+  --color-brand-50:   #F1EDFF;
+  --color-brand-100:  #E2DAFF;
+  --color-brand-400:  #8B6BFF;
+  --color-brand-500:  #6D4AFF;   /* primary */
+  --color-brand-600:  #5636E6;
+  --color-brand-700:  #3F27B8;
 
-  --shadow-soft: 0 8px 30px -12px rgba(39, 23, 15, 0.15);
-  --shadow-card: 0 4px 20px -6px rgba(39, 23, 15, 0.10);
+  --color-coral-400:  #FF8A6B;
+  --color-coral-500:  #FF6B47;   /* accent */
 
+  /* ---- Type ---- */
+  --font-display: "Sora", sans-serif;
+  --font-body:    "Manrope", sans-serif;
+
+  /* ---- Shadows / radius ---- */
+  --shadow-soft:  0 12px 40px -18px rgba(14, 11, 31, 0.28);
+  --shadow-card:  0 6px 24px -10px rgba(14, 11, 31, 0.16);
+  --shadow-glow:  0 0 0 1px rgba(109, 74, 255, 0.08), 0 18px 60px -20px rgba(109, 74, 255, 0.35);
+
+  --radius-xl2: 1.75rem;
+
+  /* ---- Animations ---- */
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-blob-float: blob-float 9s ease-in-out infinite;
-  --animate-marquee: marquee 26s linear infinite;
+  --animate-float:   float 8s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.2s linear infinite;
 }
 
 @keyframes fade-up {
-  0% { opacity: 0; transform: translateY(24px); }
+  0%   { opacity: 0; transform: translateY(20px); }
   100% { opacity: 1; transform: translateY(0); }
 }
-@keyframes blob-float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(20px, -30px) scale(1.08); }
+@keyframes float {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50%      { transform: translate(16px,-24px) scale(1.06); }
 }
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   @apply bg-ivory text-ink font-body antialiased;
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, rgba(109,74,255,0.06), transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, rgba(255,107,71,0.05), transparent 60%);
+  background-attachment: fixed;
 }
 
-h1, h2, h3, h4 {
-  @apply font-display;
+/* Dark mode (opt-in via .dark on <html>) */
+.dark body {
+  @apply bg-ink text-ivory;
+  background-image:
+    radial-gradient(1200px 600px at 10% -10%, rgba(109,74,255,0.18), transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, rgba(255,107,71,0.12), transparent 60%);
 }
+.dark .bg-white       { background-color: var(--color-ink-soft); }
+.dark .bg-ivory       { background-color: var(--color-ink); }
+.dark .text-muted     { color: #9D9AB3; }
+.dark .border-line    { border-color: #2A2540; }
 
-/* Accessible focus ring */
+h1,h2,h3,h4 { @apply font-display tracking-tight; }
+
 :focus-visible {
-  outline: 2px solid #DB2777;
+  outline: 2px solid var(--color-brand-500);
   outline-offset: 3px;
+  border-radius: 6px;
 }
 
-/* Hide scrollbar on snap-scroll sliders while keeping them scrollable */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+/* Gradient text utility */
+.gradient-text {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(100deg, var(--color-brand-500), var(--color-coral-500));
 }
 
-/* Reveal-on-scroll base state, toggled by useReveal hook */
+/* Gradient border card */
+.card-gradient {
+  position: relative;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl2);
+}
+.card-gradient::before {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, rgba(109,74,255,.35), rgba(255,107,71,.25), transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Reveal */
 .reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
 }
-.reveal.in-view {
-  opacity: 1;
-  transform: translateY(0);
-}
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal, .reveal.in-view {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-  .animate-blob-float, .animate-marquee {
-    animation: none !important;
-  }
+  .reveal, .reveal.in-view { opacity:1; transform:none; transition:none; }
+  .animate-float, .animate-shimmer { animation: none !important; }
 }

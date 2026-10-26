@@ -18,28 +18,35 @@ function chunk(arr, size) {
 
 function TestimonialCard({ t, avatar }) {
   return (
-    <figure className="relative flex h-full flex-col rounded-3xl border border-line bg-ivory p-8">
-      <Quote size={36} className="text-pink-600/15" />
-      <div className="mt-3 flex gap-1 text-pink-600">
+    <figure className="group relative flex h-full flex-col rounded-[2rem] border border-slate-100 bg-white p-8 shadow-sm hover:shadow-soft hover:-translate-y-1 transition-all duration-300">
+      {/* Decorative Quote Icon */}
+      <Quote size={40} className="absolute top-6 right-6 text-slate-100 group-hover:text-brand-50 transition-colors duration-300" />
+      
+      {/* Star Rating */}
+      <div className="flex gap-1 text-gold-500 mb-4">
         {Array.from({ length: 5 }).map((_, s) => (
-          <Star key={s} size={14} className="fill-pink-600" />
+          <Star key={s} size={16} className="fill-gold-500" />
         ))}
       </div>
-      <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-ink/80">
+
+      {/* Quote Text */}
+      <blockquote className="relative z-10 flex-1 text-[15px] leading-relaxed text-slate-700 font-medium">
         “{t.quote}”
       </blockquote>
-      <figcaption className="mt-6 flex items-center gap-3 border-t border-line pt-5">
+
+      {/* User Info */}
+      <figcaption className="mt-8 flex items-center gap-4 border-t border-slate-100 pt-6">
         <img
           src={avatar.src}
           width={avatar.width}
           height={avatar.height}
           alt={avatar.alt}
-          className="h-11 w-11 rounded-full object-cover"
+          className="h-12 w-12 rounded-full object-cover ring-2 ring-slate-100 group-hover:ring-brand-100 transition-all"
         />
         <div>
-          <p className="text-sm font-semibold">{t.name}</p>
-          <p className="text-xs text-muted">
-            {t.city} · {t.service}
+          <p className="text-sm font-bold text-slate-900">{t.name}</p>
+          <p className="text-xs font-medium text-brand-600 mt-0.5">
+            {t.city} <span className="text-slate-300 mx-1">•</span> {t.service}
           </p>
         </div>
       </figcaption>
@@ -62,35 +69,43 @@ export default function Testimonials() {
   const goTo = (i) => setPage((i + pages.length) % pages.length);
 
   return (
-    <section className="bg-white py-20 lg:py-28">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="mb-10 flex items-end justify-between gap-6">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-pink-600">
+    <section className="bg-white py-20 lg:py-28 overflow-hidden relative">
+      {/* Subtle Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gold-400/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        
+        {/* Header */}
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="max-w-xl">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-100 text-xs font-bold uppercase tracking-wider text-brand-600 mb-4">
               Loved across India
             </span>
-            <h2 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-slate-900">
               What our customers say
             </h2>
           </div>
-          <div className="hidden gap-2 sm:flex">
+          
+          {/* Navigation Buttons */}
+          <div className="flex gap-2">
             <button
               onClick={() => goTo(page - 1)}
-              className="grid h-11 w-11 place-items-center rounded-full bg-ivory shadow-card transition-shadow hover:shadow-soft"
+              className="grid h-12 w-12 place-items-center rounded-full bg-white border border-slate-200 shadow-sm transition-all hover:bg-slate-50 hover:text-brand-600 hover:border-brand-200 active:scale-95"
               aria-label="Previous"
             >
-              <ChevronLeft size={18} />
+              <ChevronLeft size={20} />
             </button>
             <button
               onClick={() => goTo(page + 1)}
-              className="grid h-11 w-11 place-items-center rounded-full bg-ivory shadow-card transition-shadow hover:shadow-soft"
+              className="grid h-12 w-12 place-items-center rounded-full bg-white border border-slate-200 shadow-sm transition-all hover:bg-slate-50 hover:text-brand-600 hover:border-brand-200 active:scale-95"
               aria-label="Next"
             >
-              <ChevronRight size={18} />
+              <ChevronRight size={20} />
             </button>
           </div>
         </div>
 
+        {/* Slider */}
         <div
           className="overflow-hidden"
           onMouseEnter={() => (pausedRef.current = true)}
@@ -106,7 +121,7 @@ export default function Testimonials() {
             {pages.map((group, i) => (
               <div key={i} style={{ width: `${100 / pages.length}%` }} className="shrink-0 px-1">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {group.map((t, idx) => (
+                  {group.map((t) => (
                     <TestimonialCard
                       key={t.name}
                       t={t}
@@ -119,14 +134,15 @@ export default function Testimonials() {
           </div>
         </div>
 
-        <div className="mt-8 flex justify-center gap-2">
+        {/* Pagination Dots */}
+        <div className="mt-10 flex justify-center gap-2">
           {pages.map((_, i) => (
             <button
               key={i}
               onClick={() => goTo(i)}
               aria-label={`Go to slide ${i + 1}`}
-              className={`h-2 rounded-full transition-all ${
-                page === i ? "w-6 bg-gradient-to-r from-amber-500 to-pink-600" : "w-2 bg-line"
+              className={`h-2.5 rounded-full transition-all duration-300 ${
+                page === i ? "w-8 bg-brand-600" : "w-2.5 bg-slate-200 hover:bg-slate-300"
               }`}
             />
           ))}

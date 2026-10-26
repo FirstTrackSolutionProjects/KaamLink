@@ -7,6 +7,7 @@ import {
   Clock,
   ChevronDown,
   Send,
+  CheckCircle2,
 } from "lucide-react";
 import useReveal from "../hooks/useReveal";
 
@@ -20,7 +21,7 @@ const METHODS = [
   {
     icon: Mail,
     title: "Email us",
-    detail: "support@kaamlink.in",
+    detail: "support@manayata.in",
     note: "We reply within 24 hours",
   },
   {
@@ -48,8 +49,8 @@ const MINI_FAQS = [
     a: "We're currently live in Bengaluru, Mumbai, Delhi NCR, Pune, Hyderabad, Chennai, Kolkata and Ahmedabad, with new cities added regularly.",
   },
   {
-    q: "How do I become a KaamLink partner?",
-    a: "Fill out the form on this page with \"Partner with us\" as the subject, and our onboarding team will reach out within 2 business days.",
+    q: "How do I become a Manayata partner?",
+    a: 'Fill out the form on this page with "Partner with us" as the subject, and our onboarding team will reach out within 2 business days.',
   },
   {
     q: "What if I'm not satisfied with a service?",
@@ -72,19 +73,19 @@ export default function Contact() {
   return (
     <>
       {/* Header */}
-      <section className="relative overflow-hidden">
-        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-gradient-to-br from-amber-300/40 to-pink-400/30 blur-3xl animate-blob-float" />
+      <section className="relative overflow-hidden bg-ivory pt-10 pb-4">
+        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-gradient-to-br from-brand-400/20 to-gold-400/20 blur-3xl animate-float" />
         <div
           ref={headerRef}
-          className={`reveal ${headerIn ? "in-view" : ""} relative max-w-3xl mx-auto px-6 lg:px-8 pt-16 pb-14 lg:pt-24 text-center`}
+          className={`reveal ${headerIn ? "in-view" : ""} relative max-w-3xl mx-auto px-6 lg:px-8 pt-10 pb-14 text-center`}
         >
-          <span className="text-xs font-semibold uppercase tracking-wider text-pink-600">
+          <span className="text-xs font-bold uppercase tracking-wider text-brand-600">
             We're here to help
           </span>
-          <h1 className="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight">
-            Get in touch with KaamLink
+          <h1 className="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
+            Get in touch with Manayata
           </h1>
-          <p className="mt-4 text-muted">
+          <p className="mt-4 text-slate-600 text-lg">
             Questions about a booking, interested in partnering with us, or
             just want to say hello — reach us any way that works for you.
           </p>
@@ -100,14 +101,14 @@ export default function Contact() {
           {METHODS.map(({ icon: Icon, title, detail, note }) => (
             <div
               key={title}
-              className="rounded-3xl bg-white p-6 shadow-card hover:shadow-soft hover:-translate-y-1 transition-all"
+              className="group rounded-3xl bg-white border border-slate-100 p-6 shadow-sm hover:shadow-soft hover:border-brand-100 hover:-translate-y-1 transition-all duration-300"
             >
-              <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-amber-500 to-pink-600 grid place-items-center mb-4">
-                <Icon size={20} className="text-white" />
+              <div className="h-12 w-12 rounded-2xl bg-brand-50 text-brand-600 grid place-items-center mb-5 group-hover:bg-brand-600 group-hover:text-white transition-colors duration-300">
+                <Icon size={22} />
               </div>
-              <p className="font-display font-bold">{title}</p>
-              <p className="mt-1 text-sm font-semibold text-ink">{detail}</p>
-              <p className="mt-0.5 text-xs text-muted">{note}</p>
+              <p className="font-display font-bold text-slate-900">{title}</p>
+              <p className="mt-1.5 text-sm font-semibold text-slate-700">{detail}</p>
+              <p className="mt-1 text-xs text-slate-500">{note}</p>
             </div>
           ))}
         </div>
@@ -117,64 +118,72 @@ export default function Contact() {
       <section className="pb-20 lg:pb-28 bg-white">
         <div
           ref={formRef}
-          className={`reveal ${formIn ? "in-view" : ""} max-w-7xl mx-auto px-6 lg:px-8 pt-20 grid lg:grid-cols-5 gap-10`}
+          className={`reveal ${formIn ? "in-view" : ""} max-w-7xl mx-auto px-6 lg:px-8 pt-16 grid lg:grid-cols-5 gap-10`}
         >
           {/* Form */}
-          <div className="lg:col-span-3 rounded-[2rem] bg-ivory p-6 sm:p-8 shadow-card">
-            <h2 className="text-2xl font-extrabold tracking-tight">Send us a message</h2>
-            <p className="mt-1.5 text-sm text-muted">
-              Fill in the details below and our team will get back to you.
+          <div className="lg:col-span-3 rounded-[2rem] bg-ivory p-6 sm:p-10 shadow-card border border-slate-100">
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900">
+              Send us a message
+            </h2>
+            <p className="mt-2 text-sm text-slate-500">
+              Fill in the details below and our team will get back to you within 24 hours.
             </p>
 
             {submitted ? (
-              <div className="mt-8 rounded-2xl bg-white border border-line p-8 text-center">
-                <div className="mx-auto h-12 w-12 rounded-full bg-gradient-to-br from-amber-500 to-pink-600 grid place-items-center">
-                  <Send size={20} className="text-white" />
+              <div className="mt-8 rounded-2xl bg-white border border-slate-200 p-10 text-center shadow-sm">
+                <div className="mx-auto h-16 w-16 rounded-full bg-green-50 flex items-center justify-center mb-4">
+                  <CheckCircle2 size={32} className="text-green-500" />
                 </div>
-                <p className="mt-4 font-display font-bold">Message sent</p>
-                <p className="mt-1 text-sm text-muted">
-                  Thanks for reaching out — we'll be in touch within 24 hours.
+                <p className="text-xl font-display font-bold text-slate-900">Message sent successfully</p>
+                <p className="mt-2 text-sm text-slate-500 max-w-sm mx-auto">
+                  Thanks for reaching out! Our support team will review your message and get back to you shortly.
                 </p>
+                <button 
+                  onClick={() => setSubmitted(false)}
+                  className="mt-6 text-sm font-bold text-brand-600 hover:text-brand-700"
+                >
+                  Send another message
+                </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="text-xs font-semibold text-ink/70">Full name</label>
+                    <label className="text-xs font-bold text-slate-700 mb-1.5 block">Full name</label>
                     <input
                       type="text"
                       required
                       placeholder="Priya Sharma"
-                      className="mt-1.5 w-full rounded-xl bg-white border border-line px-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
+                      className="w-full rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-50 transition-all placeholder:text-slate-400"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-ink/70">Phone number</label>
+                    <label className="text-xs font-bold text-slate-700 mb-1.5 block">Phone number</label>
                     <input
                       type="tel"
                       required
                       placeholder="+91 98765 43210"
-                      className="mt-1.5 w-full rounded-xl bg-white border border-line px-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
+                      className="w-full rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-50 transition-all placeholder:text-slate-400"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-ink/70">Email address</label>
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">Email address</label>
                   <input
                     type="email"
                     required
                     placeholder="you@example.com"
-                    className="mt-1.5 w-full rounded-xl bg-white border border-line px-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
+                    className="w-full rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-50 transition-all placeholder:text-slate-400"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-ink/70">Subject</label>
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">Subject</label>
                   <select
                     required
                     defaultValue=""
-                    className="mt-1.5 w-full rounded-xl bg-white border border-line px-4 py-3 text-sm outline-none focus:border-pink-400"
+                    className="w-full rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-50 transition-all text-slate-700"
                   >
                     <option value="" disabled>
                       Select a topic
@@ -188,21 +197,21 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-ink/70">Message</label>
+                  <label className="text-xs font-bold text-slate-700 mb-1.5 block">Message</label>
                   <textarea
                     required
                     rows={4}
                     placeholder="How can we help?"
-                    className="mt-1.5 w-full rounded-xl bg-white border border-line px-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60 resize-none"
+                    className="w-full rounded-xl bg-white border border-slate-200 px-4 py-3 text-sm outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-50 transition-all placeholder:text-slate-400 resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-500 to-pink-600 px-6 py-3.5 text-sm font-semibold text-white shadow-card hover:shadow-soft hover:-translate-y-0.5 transition-all"
+                  className="inline-flex items-center justify-center w-full sm:w-auto gap-2 rounded-full bg-brand-600 px-8 py-3.5 text-sm font-bold text-white shadow-md hover:bg-brand-700 hover:shadow-lg hover:-translate-y-0.5 transition-all"
                 >
                   Send message
-                  <Send size={15} />
+                  <Send size={16} />
                 </button>
               </form>
             )}
@@ -210,48 +219,52 @@ export default function Contact() {
 
           {/* Side info */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="rounded-3xl overflow-hidden border border-line">
+            <div className="rounded-3xl overflow-hidden border border-slate-200 shadow-sm">
               <iframe
-                title="KaamLink HQ location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.325678217299!2d85.84452907349846!3d20.286782412852265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909ff3be3f2dd%3A0x17413e884c672a69!2sBMC%20Bhawani%20Mall%2C%20BMC%20Bhawani%20Mall%20St%2C%20Saheed%20Nagar%2C%20Bhubaneswar%2C%20Odisha%20751007!5e0!3m2!1sen!2sin!4v1785219566576!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                title="Manayata HQ location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.325678217299!2d85.84452907349846!3d20.286782412852265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909ff3be3f2dd%3A0x17413e884c672a69!2sBMC%20Bhawani%20Mall%2C%20BMC%20Bhawani%20Mall%20St%2C%20Saheed%20Nagar%2C%20Bhubaneswar%2C%20Odisha%20751007!5e0!3m2!1sen!2sin!4v1785219566576!5m2!1sen!2sin"
                 width="100%"
-                height="220"
+                height="240"
                 style={{ border: 0 }}
+                allowFullScreen=""
                 loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
 
-            <div className="rounded-3xl bg-ivory p-6 shadow-card">
+            <div className="rounded-3xl bg-white border border-slate-100 p-6 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
-                <Clock size={16} className="text-pink-600" />
-                <p className="font-display font-bold text-sm">Support hours</p>
+                <div className="h-8 w-8 rounded-lg bg-brand-50 flex items-center justify-center text-brand-600">
+                  <Clock size={16} />
+                </div>
+                <p className="font-display font-bold text-slate-900">Support hours</p>
               </div>
-              <ul className="space-y-2 text-sm">
+              <ul className="space-y-3 text-sm">
                 {HOURS.map((h) => (
-                  <li key={h.day} className="flex justify-between text-muted">
+                  <li key={h.day} className="flex justify-between items-center text-slate-500">
                     <span>{h.day}</span>
-                    <span className="font-medium text-ink">{h.time}</span>
+                    <span className="font-semibold text-slate-900 bg-slate-50 px-2 py-1 rounded-md text-xs">{h.time}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="rounded-3xl bg-ivory p-6 shadow-card">
-              <p className="font-display font-bold text-sm mb-4">Quick answers</p>
-              <div className="space-y-2">
+            <div className="rounded-3xl bg-white border border-slate-100 p-6 shadow-sm">
+              <p className="font-display font-bold text-slate-900 mb-4">Quick answers</p>
+              <div className="space-y-3">
                 {MINI_FAQS.map((item, i) => {
                   const isOpen = openFaq === i;
                   return (
-                    <div key={item.q} className="rounded-xl border border-line bg-white overflow-hidden">
+                    <div key={item.q} className="rounded-2xl border border-slate-100 bg-slate-50 overflow-hidden">
                       <button
                         onClick={() => setOpenFaq(isOpen ? -1 : i)}
-                        className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left"
+                        className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left"
                         aria-expanded={isOpen}
                       >
-                        <span className="text-sm font-semibold">{item.q}</span>
+                        <span className="text-sm font-semibold text-slate-800">{item.q}</span>
                         <ChevronDown
-                          size={15}
-                          className={`shrink-0 text-pink-600 transition-transform duration-300 ${
+                          size={16}
+                          className={`shrink-0 text-brand-600 transition-transform duration-300 ${
                             isOpen ? "rotate-180" : ""
                           }`}
                         />
@@ -262,7 +275,7 @@ export default function Contact() {
                         }`}
                       >
                         <div className="overflow-hidden">
-                          <p className="px-4 pb-3 text-xs text-muted leading-relaxed">
+                          <p className="px-4 pb-4 text-xs text-slate-500 leading-relaxed">
                             {item.a}
                           </p>
                         </div>
