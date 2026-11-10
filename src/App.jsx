@@ -7,7 +7,7 @@ import Cities from "./components/Cities";
 import TrustStats from "./components/TrustStats";
 import Testimonials from "./components/Testimonials";
 import FAQ from "./components/FAQ";
-
+import Dashboard from "./pages/Dashboard";
 import Hero from "./components/Hero";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
@@ -18,6 +18,7 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import RefundCancellation from "./pages/Refund";
 import DataSecurity from "./pages/DataSecurity";
+import BookService from "./pages/BookService";
 export default function App() {
   return (
     <Routes>
@@ -39,8 +40,12 @@ export default function App() {
         <Route path="terms" element={<Terms />} />
         <Route path="refund" element={<RefundCancellation />} />
          <Route path="privacy" element={<Privacy />} />
+          <Route path="book/:id" element={<BookService />} />
           <Route path="data" element={<DataSecurity />} />
+<Route path="dashboard" element={<Dashboard />}/>
+
       </Route>
+    
     </Routes>
   );
 }

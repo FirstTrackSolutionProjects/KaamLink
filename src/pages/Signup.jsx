@@ -31,15 +31,54 @@ const STRENGTH_LABELS = ["Too short", "Weak", "Fair", "Good", "Strong"];
 const STRENGTH_COLORS = ["bg-line", "bg-red-400", "bg-amber-500", "bg-amber-500", "bg-green-500"];
 
 export default function Signup() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState(""); 
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const strength = useMemo(() => getStrength(password), [password]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Hook up real account creation here later
+ 
+    if (!role) {
+      alert("Please select if you need a service or provide a service.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          full_name: name,
+          email: email,
+          phone: phone,
+          password: password,
+          role: role, // Send the selected role
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Signup successful! Redirecting to dashboard...");
+        localStorage.setItem("accessToken", data.data.accessToken);
+        localStorage.setItem("user", JSON.stringify(data.data.user)); // Save user data for dashboard
+        window.location.href = "/dashboard"; 
+      } else {
+        alert("Error: " + data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Failed to connect to backend. Is the server running?");
+    }
   };
 
   return (
@@ -63,6 +102,34 @@ export default function Signup() {
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+            
+                       {/* ROLE SELECTOR TOGGLE */}
+            <div className="flex gap-4 p-1 bg-ivory rounded-xl border border-line">
+              <button
+                type="button"
+                onClick={() => setRole("customer")}
+                className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
+                  role === "customer" ? "bg-white shadow-sm text-pink-600 border border-pink-100" : "text-muted hover:text-ink"
+                }`}
+              >
+                I need a service
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole("professional")}
+                className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${
+                  role === "professional" ? "bg-white shadow-sm text-pink-600 border border-pink-100" : "text-muted hover:text-ink"
+                }`}
+              >
+                I provide a service
+              </button>
+            </div>
+            
+            {/* Optional: Small helper text if they haven't selected */}
+            {!role && (
+              <p className="text-xs text-pink-600 font-medium text-center">Please select an account type above</p>
+            )}
+
             <div>
               <label className="text-xs font-semibold text-ink/70">Full name</label>
               <div className="relative mt-1.5">
@@ -71,6 +138,8 @@ export default function Signup() {
                   type="text"
                   required
                   placeholder="Priya Sharma"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="w-full rounded-xl bg-ivory border border-line pl-10 pr-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
                 />
               </div>
@@ -84,6 +153,8 @@ export default function Signup() {
                   type="email"
                   required
                   placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-xl bg-ivory border border-line pl-10 pr-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
                 />
               </div>
@@ -97,6 +168,8 @@ export default function Signup() {
                   type="tel"
                   required
                   placeholder="+91 98765 43210"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   className="w-full rounded-xl bg-ivory border border-line pl-10 pr-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
                 />
               </div>
