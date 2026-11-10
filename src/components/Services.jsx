@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Sparkles, Bug, Wind, Wrench, Zap, Settings, PaintRoller,
   Hammer, Scissors, Truck, ChevronLeft, ChevronRight,
-  Star, Clock, ArrowUpRight,
+  Star, Clock, ArrowUpRight, Loader2
 } from "lucide-react";
 
-const SERVICES = [
-  { icon: Sparkles, name: "Deep Cleaning", desc: "Full home deep clean, kitchen & bathrooms included", rating: 4.9, reviews: "2.3k", duration: "3-4 hrs", price: 499, original: 699, tag: "Bestseller" },
+// Fallback data just in case the database is empty or backend is down
+const FALLBACK_SERVICES = [
+  { icon: Sparkles, name: "Deep Cleaning", desc: "Full home deep clean, kitchen & bathrooms included", rating: 4.9, reviews: "2.3k", duration: "3-4 hrs", price: 1499, original: 1999, tag: "Bestseller" },
   { icon: Bug, name: "Pest Control", desc: "Cockroach, ant & termite treatment, odourless spray", rating: 4.8, reviews: "1.8k", duration: "60-90 min", price: 599, original: 799, tag: "Popular" },
   { icon: Wind, name: "AC Repair & Service", desc: "Gas refill, servicing & installation for split/window ACs", rating: 4.7, reviews: "1.2k", duration: "45-60 min", price: 399, original: null, tag: null },
   { icon: Wrench, name: "Plumbing", desc: "Leak fixes, tap & pipe repair, bathroom fittings", rating: 4.6, reviews: "950", duration: "30-45 min", price: 299, original: null, tag: null },
@@ -17,6 +19,22 @@ const SERVICES = [
   { icon: Scissors, name: "Salon at Home", desc: "Haircut, facial & grooming by certified experts", rating: 4.9, reviews: "2.1k", duration: "60-90 min", price: 449, original: 599, tag: "Popular" },
   { icon: Truck, name: "Packers & Movers", desc: "Safe, insured home shifting within and across cities", rating: 4.7, reviews: "430", duration: "Half day", price: 1499, original: null, tag: null },
 ];
+
+// Map database names to Lucide icons based on matching keywords
+const getIconForService = (name) => {
+  const lowerName = name.toLowerCase();
+  if (lowerName.includes("clean")) return Sparkles;
+  if (lowerName.includes("pest")) return Bug;
+  if (lowerName.includes("ac") || lowerName.includes("air")) return Wind;
+  if (lowerName.includes("plumb")) return Wrench;
+  if (lowerName.includes("electric")) return Zap;
+  if (lowerName.includes("appliance")) return Settings;
+  if (lowerName.includes("paint")) return PaintRoller;
+  if (lowerName.includes("carpenter")) return Hammer;
+  if (lowerName.includes("salon") || lowerName.includes("hair")) return Scissors;
+  if (lowerName.includes("move") || lowerName.includes("pack")) return Truck;
+  return Sparkles; // Default
+};
 
 const TAG_STYLES = {
   Bestseller: "bg-gradient-to-r from-amber-500 to-pink-600 text-white",
@@ -30,13 +48,13 @@ function chunk(arr, size) {
   return out;
 }
 
-function ServiceCard({ s }) {
+function ServiceCard({ s, onBook }) {
   const Icon = s.icon;
   return (
     <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-line/80 bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-soft">
       {s.tag && (
         <span
-          className={`absolute top-5 right-5 z-10 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${TAG_STYLES[s.tag]}`}
+          className={`absolute top-5 right-5 z-10 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${TAG_STYLES[s.tag] || TAG_STYLES.Bestseller}`}
         >
           {s.tag}
         </span>
@@ -84,6 +102,7 @@ function ServiceCard({ s }) {
           </p>
         </div>
         <button
+          onClick={() => onBook(s.id)}
           aria-label={`Book ${s.name}`}
           className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ivory transition-colors duration-300 group-hover:bg-gradient-to-r group-hover:from-amber-500 group-hover:to-pink-600"
         >
@@ -98,11 +117,48 @@ function ServiceCard({ s }) {
 }
 
 export default function Services() {
-  const pages = useMemo(() => chunk(SERVICES, 3), []);
+  const [rawServices, setRawServices] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const pausedRef = useRef(false);
+  const navigate = useNavigate();
+
+  // Fetch services from backend
+  useEffect(() => {
+    fetch("http://localhost:5000/api/services")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.data.length > 0) {
+          // Format database data to match our UI needs
+          const formatted = data.data.map((dbService) => ({
+            id: dbService.id,
+            icon: getIconForService(dbService.name),
+            name: dbService.name,
+            desc: dbService.description || "Professional service at your doorstep",
+            rating: 4.8, // Fake rating for now
+            reviews: "100+",
+            duration: `${dbService.duration_mins} min`,
+            price: dbService.base_price,
+            original: null,
+            tag: null,
+          }));
+          setRawServices(formatted);
+        } else {
+          setRawServices(FALLBACK_SERVICES);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Backend fetch failed, using fallback data.", err);
+        setRawServices(FALLBACK_SERVICES);
+        setLoading(false);
+      });
+  }, []);
+
+  const pages = useMemo(() => chunk(rawServices, 3), [rawServices]);
 
   useEffect(() => {
+    if (pages.length <= 1) return;
     const id = setInterval(() => {
       if (!pausedRef.current) setPage((p) => (p + 1) % pages.length);
     }, 5000);
@@ -110,6 +166,25 @@ export default function Services() {
   }, [pages.length]);
 
   const goTo = (i) => setPage((i + pages.length) % pages.length);
+
+  const handleBook = (serviceId) => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("Please log in to book a service.");
+      navigate("/login");
+      return;
+    }
+    // Navigate to the booking page
+    navigate(`/book/${serviceId}`);
+  };
+
+  if (loading) {
+    return (
+      <section id="services" className="py-20 flex justify-center items-center">
+        <Loader2 className="animate-spin text-pink-600" size={40} />
+      </section>
+    );
+  }
 
   return (
     <section id="services" className="py-20 lg:py-28">
@@ -120,7 +195,7 @@ export default function Services() {
               What we offer
             </span>
             <h2 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
-              10 services, one app
+              Services, one app
             </h2>
           </div>
           <div className="hidden gap-2 sm:flex">
@@ -157,7 +232,7 @@ export default function Services() {
               <div key={i} style={{ width: `${100 / pages.length}%` }} className="shrink-0 px-1">
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {group.map((s) => (
-                    <ServiceCard key={s.name} s={s} />
+                    <ServiceCard key={s.id || s.name} s={s} onBook={handleBook} />
                   ))}
                 </div>
               </div>

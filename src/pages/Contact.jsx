@@ -64,9 +64,42 @@ export default function Contact() {
   const [methodsRef, methodsIn] = useReveal();
   const [formRef, formIn] = useReveal();
 
-  const handleSubmit = (e) => {
+  // Added State for Form Data
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          subject,
+          message,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        alert("Error: " + data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Failed to connect to backend. Is the server running?");
+    }
   };
 
   return (
@@ -145,6 +178,8 @@ export default function Contact() {
                       type="text"
                       required
                       placeholder="Priya Sharma"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       className="mt-1.5 w-full rounded-xl bg-white border border-line px-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
                     />
                   </div>
@@ -154,6 +189,8 @@ export default function Contact() {
                       type="tel"
                       required
                       placeholder="+91 98765 43210"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
                       className="mt-1.5 w-full rounded-xl bg-white border border-line px-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
                     />
                   </div>
@@ -165,6 +202,8 @@ export default function Contact() {
                     type="email"
                     required
                     placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="mt-1.5 w-full rounded-xl bg-white border border-line px-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
                   />
                 </div>
@@ -173,7 +212,8 @@ export default function Contact() {
                   <label className="text-xs font-semibold text-ink/70">Subject</label>
                   <select
                     required
-                    defaultValue=""
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
                     className="mt-1.5 w-full rounded-xl bg-white border border-line px-4 py-3 text-sm outline-none focus:border-pink-400"
                   >
                     <option value="" disabled>
@@ -193,6 +233,8 @@ export default function Contact() {
                     required
                     rows={4}
                     placeholder="How can we help?"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     className="mt-1.5 w-full rounded-xl bg-white border border-line px-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60 resize-none"
                   />
                 </div>
@@ -213,7 +255,7 @@ export default function Contact() {
             <div className="rounded-3xl overflow-hidden border border-line">
               <iframe
                 title="KaamLink HQ location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.325678217299!2d85.84452907349846!3d20.286782412852265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909ff3be3f2dd%3A0x17413e884c672a69!2sBMC%20Bhawani%20Mall%2C%20BMC%20Bhawani%20Mall%20St%2C%20Saheed%20Nagar%2C%20Bhubaneswar%2C%20Odisha%20751007!5e0!3m2!1sen!2sin!4v1785219566576!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3742.325678217299!2d85.84452907349846!3d20.286782412852265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909ff3be3f2dd%3A0x17413e884c672a69!2sBMC%20Bhawani%20Mall%2C%20BMC%20Bhawani%20Mall%20St%2C%20Saheed%20Nagar%2C%20Bhubaneswar%2C%20Odisha%20751007!5e0!3m2!1sen!2sin!4v1785219566576!5m2!1sen!2sin"
                 width="100%"
                 height="220"
                 style={{ border: 0 }}

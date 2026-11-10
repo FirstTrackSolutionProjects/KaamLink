@@ -18,12 +18,44 @@ function AppleIcon(props) {
 }
 
 export default function Login() {
+   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Hook up real authentication here later
+     try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Login successful! Redirecting to dashboard...");
+        
+        // Save the token so the user stays logged in
+        localStorage.setItem("accessToken", data.data.accessToken);
+        localStorage.setItem("user", JSON.stringify(data.data.user));
+
+        // Redirect to home (or dashboard later)
+        window.location.href = "/dashboard"; 
+      } else {
+        alert("Error: " + data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Failed to connect to backend. Is the server running?");
+    }
   };
+
 
   return (
     <section className="relative overflow-hidden py-16 lg:py-24">
@@ -51,11 +83,13 @@ export default function Login() {
               <div className="relative mt-1.5">
                 <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
                 <input
-                  type="email"
-                  required
-                  placeholder="you@example.com"
-                  className="w-full rounded-xl bg-ivory border border-line pl-10 pr-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
-                />
+  type="email"
+  required
+  placeholder="you@example.com"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  className="w-full rounded-xl bg-ivory border border-line pl-10 pr-4 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
+/>
               </div>
             </div>
 
@@ -64,11 +98,13 @@ export default function Login() {
               <div className="relative mt-1.5">
                 <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
                 <input
-                  type={showPassword ? "text" : "password"}
-                  required
-                  placeholder="Enter your password"
-                  className="w-full rounded-xl bg-ivory border border-line pl-10 pr-11 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
-                />
+  type={showPassword ? "text" : "password"}
+  required
+  placeholder="Enter your password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  className="w-full rounded-xl bg-ivory border border-line pl-10 pr-11 py-3 text-sm outline-none focus:border-pink-400 placeholder:text-muted/60"
+/>
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
