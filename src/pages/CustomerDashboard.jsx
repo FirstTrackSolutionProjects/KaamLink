@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, MapPin, Package, ArrowRight } from "lucide-react";
 
+const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+
 export default function CustomerDashboard({ token }) {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/bookings/me", { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${BACKEND_URL}/api/bookings/me`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => res.json())
       .then((data) => { if (data.success) setBookings(data.data); });
   }, [token]);

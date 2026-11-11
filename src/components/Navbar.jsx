@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, User, LogIn, UserPlus, ArrowRight, LayoutDashboard, LogOut, ChevronDown } from "lucide-react";
 import { assets } from "../assets/asset";
 
+const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+
 const NAV_LINKS = [
   {
     label: "Home",
@@ -35,7 +37,7 @@ export default function Navbar() {
     if (token) setIsLoggedIn(true);
 
     // Fetch services for the dropdown
-    fetch("http://localhost:5000/api/services")
+    fetch(`${BACKEND_URL}/api/services`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) setNavServices(data.data);

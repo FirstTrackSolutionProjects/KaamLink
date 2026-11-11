@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
 import { Calendar, MapPin, CheckCircle, IndianRupee, Briefcase } from "lucide-react";
 
+const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+
 export default function ProfessionalDashboard({ token }) {
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/bookings/available", { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${BACKEND_URL}/api/bookings/available`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => res.json())
       .then((data) => { if (data.success) setJobs(data.data); });
   }, [token]);
 
   const handleAccept = async (id) => {
-    const res = await fetch(`http://localhost:5000/api/bookings/${id}/accept`, {
+    const res = await fetch(`${BACKEND_URL}/api/bookings/${id}/accept`, {
       method: "PATCH",
       headers: { Authorization: `Bearer ${token}` }
     });
