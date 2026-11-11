@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Calendar, MapPin, CheckCircle } from "lucide-react";
 
+const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+
 export default function BookService() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export default function BookService() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/services`)
+    fetch(`${BACKEND_URL}/api/services`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Backend Services Data:", data); // Check F12 console!
@@ -44,7 +46,7 @@ export default function BookService() {
     const slot_start = new Date(`${date}T${time}:00`).toISOString();
 
     try {
-      const response = await fetch("http://localhost:5000/api/bookings", {
+      const response = await fetch(`${BACKEND_URL}/api/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
 import { Users, CalendarCheck, IndianRupee, MessageSquare, UserPlus } from "lucide-react";
 
+const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+
 export default function AdminDashboard({ token }) {
   const [bookings, setBookings] = useState([]);
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/bookings/all", { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${BACKEND_URL}/api/bookings/all`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => res.json())
       .then((data) => { if (data.success) setBookings(data.data); });
 
-    fetch("http://localhost:5000/api/contact", { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${BACKEND_URL}/api/contact`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => res.json())
       .then((data) => { if (data.success) setMessages(data.data); });
   }, [token]);

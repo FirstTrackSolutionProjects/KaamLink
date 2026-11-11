@@ -6,6 +6,8 @@ import {
   Star, Clock, ArrowUpRight, Loader2
 } from "lucide-react";
 
+const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+
 // Fallback data just in case the database is empty or backend is down
 const FALLBACK_SERVICES = [
   { icon: Sparkles, name: "Deep Cleaning", desc: "Full home deep clean, kitchen & bathrooms included", rating: 4.9, reviews: "2.3k", duration: "3-4 hrs", price: 1499, original: 1999, tag: "Bestseller" },
@@ -125,7 +127,7 @@ export default function Services() {
 
   // Fetch services from backend
   useEffect(() => {
-    fetch("http://localhost:5000/api/services")
+    fetch(`${BACKEND_URL}/api/services`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.data.length > 0) {
